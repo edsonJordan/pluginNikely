@@ -16,6 +16,8 @@ use Nikeli\Nikely_init;
 use Nikeli\RolesManager;
 use Nikeli\DiscountManager;
 use Nikeli\ProductPointsManager;
+use Nikeli\SettingsPage;
+
 
  if (!defined('ABSPATH')) {
      exit;
@@ -27,8 +29,8 @@ use Nikeli\ProductPointsManager;
 
 
  // Hook plugin activation and deactivation
- register_activation_hook(__FILE__, ['Nikeli\Nikeli_Init', 'activate']);
- register_deactivation_hook(__FILE__, ['Nikeli\Nikeli_Init', 'deactivate']);
+ register_activation_hook(__FILE__, ['Nikeli\Nikely_init', 'activate']);
+ register_deactivation_hook(__FILE__, ['Nikeli\Nikely_init', 'deactivate']);
  
  // Include other plugin files and initiate classes
  Nikely_init::instance();
@@ -37,3 +39,4 @@ use Nikeli\ProductPointsManager;
 $roles_manager = new RolesManager(__FILE__);
 $discount_manager = new DiscountManager();
 $productPointsManager = new ProductPointsManager();
+$settings_page = new SettingsPage();
