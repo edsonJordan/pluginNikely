@@ -24,11 +24,11 @@ class DiscountManager {
         // Comprobamos las condiciones para cada tipo de rol
         if (in_array('ejecutivo', $current_user->roles)) {
             if ($total_items >= 6 || $cart_total >= 250) {
-                $discount_rate = ($total_items >= 25 && $cart_total >= 1000) ? 0.50 : 0.40;
+                $discount_rate = $discounts_settings['discount_rate_ejecutivo'] / 100;
             }
         } elseif (in_array('plus', $current_user->roles)) {
             if ($total_items >= 12 || $cart_total >= 500) {
-                $discount_rate = ($total_items >= 25 && $cart_total >= 1000) ? 0.50 : 0.45;
+                $discount_rate = $discounts_settings['discount_rate_plus'] / 100;
             }
         } elseif (in_array('top', $current_user->roles)) {
             if ($total_items >= 25 || $cart_total >= 1000) {

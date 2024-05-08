@@ -7,25 +7,31 @@
  * Author: Tu Nombre
  * Author URI: http://tuwebsite.com
  */
+
  
+  // Define plugin constants
+  define('NIKELI_PLUGIN_DIR', plugin_dir_path(__FILE__));
+  define('NIKELI_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 
  require_once __DIR__ . '/vendor/autoload.php';
+ require_once NIKELI_PLUGIN_DIR . 'includes/source/OrdersPointsListTable.php';
+
 
 use Nikeli\Nikely_init;
 use Nikeli\RolesManager;
 use Nikeli\DiscountManager;
 use Nikeli\ProductPointsManager;
 use Nikeli\SettingsPage;
+use Nikeli\PointsAdminPage;
+use Nikeli\OrdersPointsManager;
 
 
  if (!defined('ABSPATH')) {
      exit;
  }
  
- // Define plugin constants
- define('NIKELI_PLUGIN_DIR', plugin_dir_path(__FILE__));
- define('NIKELI_PLUGIN_URL', plugin_dir_url(__FILE__));
+
 
 
  // Hook plugin activation and deactivation
@@ -40,3 +46,6 @@ $roles_manager = new RolesManager(__FILE__);
 $discount_manager = new DiscountManager();
 $productPointsManager = new ProductPointsManager();
 $settings_page = new SettingsPage();
+
+$points_AdminPage = new PointsAdminPage();
+$OrdersPointsManager = new OrdersPointsManager(__FILE__);
