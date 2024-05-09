@@ -1,0 +1,13 @@
+/*
+Theme Name: Hello Elementor Child
+Theme URI: http://tusitio.com/
+Description: Tema hijo de Hello Elementor personalizado para tu sitio.
+Author: Tu Nombre
+Author URI: http://tusitio.com/
+Template: hello-elementor
+Version: 1.0.0
+Text Domain: hello-elementor-child
+*/
+
+/* Importar estilos del tema padre */
+@import url("../hello-elementor/style.css");
