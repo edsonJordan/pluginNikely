@@ -52,6 +52,9 @@ class PointsManager {
         $this->update_user_points($order->get_customer_id(), $points, 'add');
     }
 
+
+    
+
     private function meets_special_conditions($order) {
         // Lógica para determinar condiciones especiales (ej. compra de paquetes, rangos, etc.)
         return true; // Simplificado para el ejemplo

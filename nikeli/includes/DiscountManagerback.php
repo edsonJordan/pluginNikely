@@ -3,11 +3,13 @@ namespace Nikeli;
 
 class DiscountManager {
     public function __construct() {
-        add_action('woocommerce_before_calculate_totals', [$this, 'adjust_pricing']);
+        add_action('woocommerce_before_calculate_totals', [$this, 'add_points_to_cart_item']);
+        add_action('woocommerce_after_calculate_totals', [$this, 'adjust_pricing']);
         add_filter('woocommerce_cart_item_name', [$this, 'display_individual_discount'], 10, 3);
         add_action('woocommerce_checkout_create_order_line_item', [$this, 'add_points_info_to_order_items'], 10, 4);
-        add_action('woocommerce_cart_calculate_fees', [$this, 'apply_additional_discounts'], 20);
     }
+
+
 
     public function add_points_info_to_order_items($item, $cart_item_key, $values, $order) {
         if (isset($values['nikeli_points'])) {
@@ -15,6 +17,7 @@ class DiscountManager {
         }
     }
       
+
     public function add_points_to_cart_item($cart) {
         if (is_admin() && !defined('DOING_AJAX')) return;
         foreach ($cart->get_cart() as &$item) {
@@ -26,22 +29,33 @@ class DiscountManager {
 
     public function adjust_pricing($cart) {
         if (is_admin() && !defined('DOING_AJAX')) return;
+
+
+
+
         $current_user = wp_get_current_user();
+
         $user_active = get_user_meta($current_user->ID, 'estado_linea_nikeli', true);
+        
+        // Si el usuario no está activo, no aplicar descuentos
         if ($user_active != '1') {
             return;
         }
-        $discount_rate = 0;
+
         $discounts_settings = get_option('discounts_settings');
+        $discount_rate = 0;
         foreach ($cart->get_cart() as $item) {
-            if (in_array('ejecutivo', $current_user->roles)) {
+            $total_items = $item['quantity'];
+            $cart_total = $cart->cart_contents_total;
+
+            if (in_array('ejecutivo', $current_user->roles) ) {
                 $discount_rate = $discounts_settings['discount_rate_ejecutivo'] / 100;
-            } else if (in_array('plus', $current_user->roles)) {
+            } else if (in_array('plus', $current_user->roles) ) {
                 $discount_rate = $discounts_settings['discount_rate_plus'] / 100;
-            } else if (in_array('top', $current_user->roles)) {
+            } else if (in_array('top', $current_user->roles) ) {
                 $discount_rate = $discounts_settings['discount_rate_top'] / 100;
             }
-
+            
             if ($discount_rate > 0) {
                 $original_price = $item['data']->get_price();
                 $discounted_price = $original_price * (1 - $discount_rate);
@@ -62,18 +76,17 @@ class DiscountManager {
         }
         return $item_name;
     }
+    
 
-    public function apply_additional_discounts($cart) {
-        if (!is_admin() && defined('DOING_AJAX') && DOING_AJAX) {
-            $total_discount = 0;
-            foreach ($cart->get_cart() as $item) {
-                if (isset($item['discount_amount'])) {
-                    $total_discount += $item['discount_amount'] * $item['quantity'];
-                }
+    public function apply_cart_discount($cart) {
+        $total_discount = 0;
+        foreach ($cart->get_cart() as $item) {
+            if (isset($item['discount_amount'])) {
+                $total_discount += $item['discount_amount'] * $item['quantity'];
             }
-            if ($total_discount > 0) {
-                $cart->add_fee('Descuento Total', -$total_discount, true);
-            }
+        }
+        if ($total_discount > 0) {
+            $cart->add_fee('Descuento Total', -$total_discount, false);
         }
     }
 }

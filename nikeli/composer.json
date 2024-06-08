@@ -1,5 +1,10 @@
 {
     "autoload": {
-        "psr-4": {"Nikeli\\": "includes/"}
+        "psr-4": 
+        {   "Nikeli\\": "includes/",
+            "Referidos\\": "includes/referidos/",
+            "Factory\\": "includes/factory/"
+            }
+        
     }
 }
